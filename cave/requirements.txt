@@ -1,0 +1,14 @@
+Django==3.2.13
+dj_database_url
+django_hosts
+easy_thumbnails
+gunicorn==19.9.0
+jsonfield==3.1.0
+numpy
+requests
+Pillow
+psycopg2
+pandas
+pyshorteners
+redis==3.3.8
+

@@ -1,0 +1,97 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/home.css' %}" />
+    <!-- Box icons -->
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <title>Acade | Url Shortener</title>
+  </head>
+  <body>
+    <main>
+      <header>
+        <a href="/" class="logo pink-blue-gradient-text">Acade</a>
+        <div class="cta">
+          <a href="#" class="btn btn-login">
+            <span>Login</span>
+          </a>
+          <a href="#" class="btn btn-register">
+            <span>Register</span>
+          </a>
+        </div>
+      </header>
+      <div class="container">
+        <div class="hero-section">
+          <h2 class="section-title">
+            <span class="blue-pink-gradient-text">Shorten</span>
+            <span class="pink-blue-gradient-text">Your</span>
+            <span class="pink-blue-gradient-text">Loooong Links :)</span>
+          </h2>
+          <p class="section-desc">
+            Acade is an efficient and easy-to-use URL shortening service that
+            streamlines your online experience.
+          </p>
+          <form method="POST" action=""> {% csrf_token %}
+            <div class="icon">
+              <i class="bx bx-link"></i>
+            </div>
+            {{form}}
+            <button  onclick="remove_input_value(event)"  type="submit">Shorten Url!</button>
+          </form>
+          <div class="dashboard">
+            <table>
+              <thead>
+                <th>Short Url</th>
+                <th>Long Url</th>
+                <th>Actions</th>
+              </thead>
+              <tbody>
+                <tr>
+                  <td id="shortUrl">
+                    {% if object.get_short_url %}
+                    <a href="{{ object.get_short_url }}" target="_blank">{{ object.get_short_url }}</a>
+                    {% else %}
+                    <a href="http://www.acade.com:8000/nz01e4/" target="_blank">http://www.acade.com:8000/nz01e4/</a>
+                    {% endif %}
+                  </td>
+                  <td id="longUrl">{% if object.url %}{{ object.url}}{% else %}https://www.desishub.com/{% endif %}</td>
+                  <td>
+                    <div class="actions">
+                      <button title="copy short url" id="copyBtn">
+                        <div class="icon">
+                          <i class="bx bxs-copy"></i>
+                        </div>
+                      </button>
+                      <a href="#" title="delete">
+                        <div class="icon delete">
+                          <i class="bx bx-trash"></i>
+                        </div>
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <footer>
+          <p class="blue-pink-gradient-text">
+            App Designed JB @ <a href="https://www.desishub.com">desishub</a>
+          </p>
+          <p class="pink-blue-gradient-text">
+            Backend implemented by @
+            <a href="https://www.academycity.com">Academy City</a>
+          </p>
+        </footer>
+      </div>
+    </main>
+    <script src="{% static 'js/app.js' %}"></script>
+  </body>
+</html>

@@ -1,0 +1,156 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+    <script src="{% static 'js/js.cookie.min.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+  integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+  crossorigin="anonymous">
+</script>
+    <!-- Box icons -->
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <title>Bitly | Url Shortener</title>
+  </head>
+  <body>
+    <main>
+      <header>
+        <a href="/" class="logo pink-blue-gradient-text">Bitly</a>
+        <div class="cta">
+          <a href="#" class="btn btn-login">
+            <span>Login</span>
+          </a>
+          <a href="#" class="btn btn-register">
+            <span>Register</span>
+          </a>
+        </div>
+      </header>
+      <div class="container">
+        <div class="hero-section">
+          <h2 class="section-title">
+            <span class="blue-pink-gradient-text">Shorten</span>
+            <span class="pink-blue-gradient-text">Your</span>
+            <span class="pink-blue-gradient-text">Loooong Links :)</span>
+          </h2>
+          <p class="section-desc">
+            Bitly is an efficient and easy-to-use URL shortening service that
+            streamlines your online experience.
+          </p>
+          <div class="form_" method="post">
+            <div class="icon">
+              <i class="bx bx-link"></i>
+            </div>
+           <input
+              type="text"
+              id="inputLink"
+              name="input-link"
+              placeholder="Enter the Link here"
+            />
+            <button class="" onclick="shorten_url(event)" type="submit">Shorten Url!</button>
+          </div>
+          <div class="dashboard">
+            <table>
+              <thead>
+                <th>Short Url</th>
+                <th>Long Url</th>
+                <th>Actions</th>
+              </thead>
+              <tbody>
+                <tr id="tr_">
+                  <td id="shortUrl" style="visibility:hidden"></td>
+                  <td id="longUrl" style="visibility:hidden"></td>
+                  <td>
+                    <div class="actions">
+                      <button title="copy short url"  style="visibility:hidden">
+                        <div class="icon" id="copyBtn">
+                          <i class="bx bxs-copy"></i>
+                        </div>
+                      </button>
+                      <button style="visibility:hidden">
+                      <a href="#" title="delete" >
+                        <div class="icon delete" id="deleteBtn">
+                          <i class="bx bx-trash"></i>
+                        </div>
+                      </a>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <footer>
+          <p class="blue-pink-gradient-text">
+            App Designed JB @ <a href="https://www.desishub.com">desishub</a>
+          </p>
+          <p class="pink-blue-gradient-text">
+            Backend implemented by @
+            <a href="https://www.academycity.com">Academy City</a>
+          </p>
+        </footer>
+      </div>
+    </main>
+    <script src="{% static 'js/app.js' %}"></script>
+
+    <script type="text/javaScript">
+        var csrftoken = Cookies.get('csrftoken');
+          function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+          }
+          $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+              if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+              }
+            }
+          });
+          var link_urlshortener = '{% url "main:homeview" %}'
+          function shorten_url(event)
+          {
+            var full_link_ = document.getElementById("inputLink").value
+            alert(full_link_)
+            if(full_link_==""){alert("Enter link");return;}
+             try{
+                  $.post(link_urlshortener,
+                    {
+                      full_link : full_link_,
+                    },
+                    function(data){
+                        //alert(JSON.stringify(data))
+                        short_url = data['shorturl']
+                        long_url = data['longurl']
+                        document.getElementById("shortUrl").innerHTML = short_url
+                        document.getElementById("longUrl").innerHTML = long_url
+                        document.getElementById("shortUrl").style.visibility = "visible"
+                        document.getElementById("longUrl").style.visibility = "visible"
+                        document.getElementById("copyBtn").style.visibility = "visible"
+                        document.getElementById("deleteBtn").style.visibility = "visible"
+                        document.getElementById("inputLink").value = ""
+
+                        var cbtn =  document.getElementById("copyBtn")
+                        var dbtn = document.getElementById("deleteBtn")
+                       if(dbtn.innerHTML==""){dbtn.innerHTML='<i class="bx bx-trash"></i>'; cbtn.innerHTML='<i class="bx bxs-copy"></i>'}
+
+                        document.getElementById("deleteBtn").onclick = function(event)
+                        {
+                         document.getElementById("shortUrl").innerHTML = ""
+                         document.getElementById("longUrl").innerHTML = ""
+                         document.getElementById("copyBtn").innerHTML = ""
+                         document.getElementById("deleteBtn").innerHTML = ""
+                        }
+                    });
+             }catch(er){alert(er)}
+
+          }
+    </script>
+  </body>
+</html>
